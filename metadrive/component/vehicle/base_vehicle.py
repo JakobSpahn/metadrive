@@ -4,7 +4,6 @@ from collections import deque
 from typing import Union, Optional
 
 import numpy as np
-import seaborn as sns
 from panda3d._rplight import RPSpotLight
 from panda3d.bullet import BulletVehicle, BulletBoxShape, ZUp
 from panda3d.core import Material, Vec3, TransformState
@@ -17,7 +16,7 @@ from metadrive.component.lane.point_lane import PointLane
 from metadrive.component.lane.straight_lane import StraightLane
 from metadrive.component.navigation_module.node_network_navigation import NodeNetworkNavigation
 from metadrive.component.pg_space import VehicleParameterSpace, ParameterSpace
-from metadrive.constants import CamMask
+from metadrive.constants import CamMask, COLOR_PALETTE
 from metadrive.constants import MetaDriveType, CollisionGroup
 from metadrive.constants import Semantics
 from metadrive.engine.asset_loader import AssetLoader
@@ -139,6 +138,8 @@ class BaseVehicle(BaseObject, BaseVehicleState):
         self.update_config(vehicle_config)
         self.set_metadrive_type(MetaDriveType.VEHICLE)
         use_special_color = self.config["use_special_color"]
+
+        self.render_vehicle = vehicle_config["render_vehicle"]
 
         # build vehicle physics model
         vehicle_chassis = self._create_vehicle_chassis()
@@ -622,7 +623,7 @@ class BaseVehicle(BaseObject, BaseVehicleState):
         return vehicle_chassis
 
     def _add_visualization(self):
-        if self.render:
+        if self.render and self.render_vehicle:
             [path, scale, offset, HPR] = self.path
             if path not in BaseVehicle.model_collection:
                 car_model = self.loader.loadModel(AssetLoader.file_path("models", path))
@@ -670,7 +671,7 @@ class BaseVehicle(BaseObject, BaseVehicleState):
         wheel_np = self.origin.attachNewNode("wheel")
         self._node_path_list.append(wheel_np)
 
-        if self.render:
+        if self.render and self.render_vehicle:
             model = 'right_tire_front.gltf' if front else 'right_tire_back.gltf'
             model_path = AssetLoader.file_path("models", os.path.dirname(self.path[0]), model)
             wheel_model = self.loader.loadModel(model_path)
@@ -992,7 +993,7 @@ class BaseVehicle(BaseObject, BaseVehicleState):
     def panda_color(self):
         c = super(BaseVehicle, self).panda_color
         if self._use_special_color:
-            color = sns.color_palette("colorblind")
+            color = COLOR_PALETTE
             rand_c = color[2]  # A pretty green
             c = rand_c
         return c

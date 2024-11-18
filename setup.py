@@ -32,7 +32,7 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 packages = find_namespace_packages(
-    exclude=("docs", "docs.*", "documentation", "documentation.*", "build.*"))
+    exclude=("docs", "docs.*", "documentation", "documentation.*", "build.*", "tests", "tests.*", "examples", "examples.*"))
 print("We will install the following packages: ", packages)
 
 install_requires = [
@@ -40,27 +40,30 @@ install_requires = [
     "gymnasium>=0.28",
     "numpy>=1.21.6",
     "matplotlib",
-    "pandas",
-    "pygame",
     "tqdm",
     "yapf",
-    "seaborn",
     "tqdm",
     "progressbar",
     "panda3d==1.10.14",
     "panda3d-gltf==0.13",  # 0.14 will bring some problems
     "pillow",
-    "pytest",
     "opencv-python-headless",
     "lxml",
-    "scipy",
     "psutil",
-    "geopandas",
     "shapely",
     "filelock",
     "Pygments",
 ]
 
+top_down_requirement = [
+    "pygame"
+]
+
+test_requirement = [
+    "pandas",
+    "pytest",
+    "scipy"
+]
 
 cuda_requirement = [
     "cuda-python==12.0.0",

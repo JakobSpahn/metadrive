@@ -124,6 +124,8 @@ BASE_DEFAULT_CONFIG = dict(
         use_special_color=False,
         # Clear wheel friction, so it can not move by setting steering and throttle/brake. Used for ReplayPolicy
         no_wheel_friction=False,
+        # Whether to render the 3D model of the vehicle
+        render_vehicle=True,
 
         # ===== image capturing =====
         # Which camera to use for image observation. It should be a sensor registered in sensor config.
@@ -209,6 +211,8 @@ BASE_DEFAULT_CONFIG = dict(
     preload_models=True,
     # model compression increasing the launch time
     disable_model_compression=True,
+    # Whether to use anisotropic filtering. Very expensive option.
+    anisotropic_filtering=True,
 
     # ===== Terrain =====
     # The size of the square map region, which is centered at [0, 0]. The map objects outside it are culled.
